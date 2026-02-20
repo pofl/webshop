@@ -5,8 +5,9 @@ import { Hono } from "hono";
 import { openDatabase } from "./db.js";
 import { MigrationRunner } from "./migrate.js";
 import { migrations } from "./migrations.js";
+import { createCartRoutes } from "./routes/cart.js";
 import { createHomeRoutes } from "./routes/home.js";
-import { createTaskRoutes } from "./routes/tasks.js";
+import { createProductRoutes } from "./routes/products.js";
 
 config();
 const db = openDatabase();
@@ -35,7 +36,8 @@ app.use("*", async (c, next) => {
 
 // Mount route modules
 app.route("/", createHomeRoutes(db));
-app.route("/tasks", createTaskRoutes(db));
+app.route("/products", createProductRoutes(db));
+app.route("/cart", createCartRoutes(db));
 
 serve(
   {
