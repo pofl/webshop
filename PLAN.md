@@ -34,3 +34,31 @@ routes/api.ts. Here we expose JSON endpoints with which the SPA can interact
 with the same database as the SSR app. On success, endpoints return JSON
 entities or no content. On error they return { error: "..." }. Keep separate
 `npm run dev`-like commands for the Hono server and for Vite/React.
+
+Current decisions for Milestone 2:
+
+* Scope is feature parity with the SSR app only: home/search, product detail,
+  and cart.
+* SPA routes should mirror existing SSR paths.
+* Zustand usage should be minimal for now: keep cart state in Zustand; use local
+  component state for the rest.
+* API errors should use appropriate HTTP status codes and return `{ error: "..."
+  }`.
+* Search should support both behaviors: debounced typing updates and explicit
+  submit.
+* Cart UI updates should wait for API success (no optimistic updates).
+* Development should keep separate server processes/ports for Hono and
+  Vite/React.
+* Cart API shape should prefer separate endpoints over an aggregated response.
+* API should use REST-style resource routes.
+* Product search does not need pagination in this milestone.
+* Cart should be identified per browser session (session cookie cart).
+* Error responses should be mixed: user-friendly validation errors and generic
+  server-error messages.
+* Session cart cookie should be unsigned for simplicity.
+* Debounced search should trigger from the first character (no minimum length).
+* Remove-from-cart endpoint should return no content on success.
+* SPA error presentation should use plain inline text near the relevant action
+  (no toast system).
+* API base path should remain `/api` (no `/api/v1` versioning in this
+  milestone).
