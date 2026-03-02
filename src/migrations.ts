@@ -2,21 +2,35 @@ import type { Migration } from "./migrate.js";
 
 export const migrations: Migration[] = [
   {
-    id: "20260220-create-table-tasks",
+    id: "20260220-create-products-and-cart",
     sql: `
-      CREATE TABLE IF NOT EXISTS tasks (
+      CREATE TABLE IF NOT EXISTS products (
         id INTEGER PRIMARY KEY,
-        created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
-        updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
-        title TEXT NOT NULL,
-        is_done INTEGER NOT NULL DEFAULT 0,
-        CONSTRAINT tasks_created_at_utc CHECK (created_at LIKE '%Z' AND datetime(created_at) IS NOT NULL),
-        CONSTRAINT tasks_updated_at_utc CHECK (updated_at LIKE '%Z' AND datetime(updated_at) IS NOT NULL),
-        CONSTRAINT tasks_is_done_bool CHECK (is_done IN (0, 1))
+        name TEXT NOT NULL,
+        description TEXT NOT NULL DEFAULT '',
+        price_cents INTEGER NOT NULL,
+        created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now'))
       );
 
-      CREATE INDEX IF NOT EXISTS tasks_done_idx ON tasks (is_done);
-      CREATE INDEX IF NOT EXISTS tasks_created_idx ON tasks (created_at);
+      CREATE INDEX IF NOT EXISTS products_name_idx ON products (name);
+
+      INSERT OR IGNORE INTO products (id, name, description, price_cents) VALUES
+        (1, 'Wireless Headphones', 'Over-ear noise-cancelling headphones with 30h battery', 7999),
+        (2, 'Mechanical Keyboard', 'Compact TKL keyboard with tactile switches', 12999),
+        (3, 'USB-C Hub', '7-in-1 hub with HDMI, USB-A, SD card reader', 3499),
+        (4, 'Webcam HD', '1080p webcam with built-in microphone', 5999),
+        (5, 'Mouse Pad XL', 'Extra-large desk mat, 90x40cm', 1999),
+        (6, 'LED Desk Lamp', 'Adjustable color temperature and brightness', 2999),
+        (7, 'Laptop Stand', 'Aluminium adjustable laptop stand', 4499),
+        (8, 'HDMI Cable 2m', '4K-ready braided HDMI cable', 999);
+
+      CREATE TABLE IF NOT EXISTS cart_items (
+        id INTEGER PRIMARY KEY,
+        product_id INTEGER NOT NULL REFERENCES products(id) ON DELETE CASCADE,
+        created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now'))
+      );
+
+      CREATE INDEX IF NOT EXISTS cart_items_product_idx ON cart_items (product_id);
     `,
   },
 ];

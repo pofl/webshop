@@ -2,34 +2,27 @@ import type { Database } from "better-sqlite3";
 import { Hono } from "hono";
 import type { FC } from "hono/jsx";
 import { Layout } from "../components/Layout.js";
-import { listTasks, type TaskRecord } from "../repository.js";
-import { TaskListSection } from "./tasks.js";
+import { countCartItems, searchProducts, type ProductRecord } from "../repository.js";
+import { ProductList } from "./products.js";
 
-const HomePage: FC<{ tasks: TaskRecord[] }> = ({ tasks }) => {
+const HomePage: FC<{ products: ProductRecord[]; cartCount: number }> = ({ products, cartCount }) => {
   return (
-    <Layout title="Web App Template">
-      <h1>Web App Template</h1>
-      <p class="muted">Starter stack: Hono + server-rendered JSX + SQLite + Zod + HTMX + Alpine.js</p>
-
-      <section class="card" x-data="{ showHint: false }">
-        <div class="row-between">
-          <h2>Tasks</h2>
-          <button type="button" class="button-secondary" x-on:click="showHint = !showHint">
-            Toggle hint
-          </button>
-        </div>
-        <p class="muted" x-show="showHint" x-cloak>
-          This module is intentionally tiny and demonstrates validated form handling, repository access, and HTMX
-          partial swaps.
-        </p>
-
-        <form method="post" action="/tasks" hx-post="/tasks" hx-target="#task-list" hx-swap="outerHTML" class="row">
-          <input type="text" name="title" placeholder="Add a task" required maxlength={200} />
-          <button type="submit">Add</button>
-        </form>
+    <Layout title="Web Shop" cartCount={cartCount}>
+      <h1>Web Shop</h1>
+      <section class="card">
+        <input
+          type="text"
+          name="q"
+          placeholder="Search products…"
+          class="search-input"
+          hx-get="/products/search"
+          hx-trigger="input changed delay:200ms"
+          hx-target="#product-list"
+          hx-swap="outerHTML"
+          autofocus
+        />
       </section>
-
-      <TaskListSection tasks={tasks} />
+      <ProductList products={products} />
     </Layout>
   );
 };
@@ -38,7 +31,9 @@ export const createHomeRoutes = (db: Database) => {
   const app = new Hono();
 
   app.get("/", (c) => {
-    return c.html(<HomePage tasks={listTasks(db)} />);
+    const products = searchProducts(db, "");
+    const cartCount = countCartItems(db);
+    return c.html(<HomePage products={products} cartCount={cartCount} />);
   });
 
   return app;

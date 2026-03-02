@@ -5,7 +5,12 @@ export const idParamSchema = z.object({
   id: z.coerce.number().int().positive(),
 });
 
-/** Shared form schema for creating tasks */
-export const taskTitleFormSchema = z.object({
-  title: z.string().trim().min(1).max(200),
+/** Query schema for product search */
+export const searchQuerySchema = z.object({
+  q: z.string().default(""),
+});
+
+/** Form schema for adding a product to the cart */
+export const addToCartFormSchema = z.object({
+  product_id: z.coerce.number().int().positive(),
 });
