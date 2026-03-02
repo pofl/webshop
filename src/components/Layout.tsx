@@ -19,7 +19,9 @@ export const Layout: FC<LayoutProps> = ({ title, children, cartCount = 0 }) => {
       </head>
       <body>
         <header class="site-header">
-          <a href="/" class="site-title">Web Shop</a>
+          <a href="/" class="site-title">
+            Web Shop
+          </a>
           <a href="/cart" class="cart-button">
             🛒 Cart
             {cartCount > 0 && <span class="cart-badge">{cartCount}</span>}

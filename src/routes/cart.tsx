@@ -20,10 +20,14 @@ const CartPage: FC<{ items: CartItemRecord[]; cartCount: number }> = ({ items, c
         <ul class="cart-list">
           {items.map((item) => (
             <li class="cart-item">
-              <a href={`/products/${item.product_id}`} class="cart-item-name">{item.product_name}</a>
+              <a href={`/products/${item.product_id}`} class="cart-item-name">
+                {item.product_name}
+              </a>
               <span class="cart-item-price">{formatPrice(item.price_cents)}</span>
               <form method="post" action={`/cart/${item.id}/remove`}>
-                <button type="submit" class="button-danger">Remove</button>
+                <button type="submit" class="button-danger">
+                  Remove
+                </button>
               </form>
             </li>
           ))}

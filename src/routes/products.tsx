@@ -27,7 +27,9 @@ export const ProductList: FC<{ products: ProductRecord[] }> = ({ products }) => 
 
 const ProductDetailPage: FC<{ product: ProductRecord; cartCount: number }> = ({ product, cartCount }) => (
   <Layout title={product.name} cartCount={cartCount}>
-    <a href="/" class="back-link">← Back to search</a>
+    <a href="/" class="back-link">
+      ← Back to search
+    </a>
     <section class="card">
       <h1>{product.name}</h1>
       <p class="muted">{product.description}</p>

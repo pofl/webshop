@@ -35,9 +35,10 @@ function parseCartItemRecord(row: Record<string, unknown>): CartItemRecord {
 }
 
 export function searchProducts(db: Database, query: string): ProductRecord[] {
-  const rows = db
-    .prepare("SELECT * FROM products WHERE name LIKE ? ORDER BY name")
-    .all(`%${query}%`) as Record<string, unknown>[];
+  const rows = db.prepare("SELECT * FROM products WHERE name LIKE ? ORDER BY name").all(`%${query}%`) as Record<
+    string,
+    unknown
+  >[];
   return rows.map(parseProductRecord);
 }
 
