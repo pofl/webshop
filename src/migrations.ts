@@ -33,4 +33,11 @@ export const migrations: Migration[] = [
       CREATE INDEX IF NOT EXISTS cart_items_product_idx ON cart_items (product_id);
     `,
   },
+  {
+    id: "20260302-add-session-id-to-cart-items",
+    sql: `
+      ALTER TABLE cart_items ADD COLUMN session_id TEXT;
+      CREATE INDEX IF NOT EXISTS cart_items_session_idx ON cart_items (session_id);
+    `,
+  },
 ];

@@ -5,6 +5,7 @@ import { Hono } from "hono";
 import { openDatabase } from "./db.js";
 import { MigrationRunner } from "./migrate.js";
 import { migrations } from "./migrations.js";
+import { createApiRoutes } from "./routes/api.js";
 import { createCartRoutes } from "./routes/cart.js";
 import { createHomeRoutes } from "./routes/home.js";
 import { createProductRoutes } from "./routes/products.js";
@@ -38,6 +39,7 @@ app.use("*", async (c, next) => {
 app.route("/", createHomeRoutes(db));
 app.route("/products", createProductRoutes(db));
 app.route("/cart", createCartRoutes(db));
+app.route("/api", createApiRoutes(db));
 
 serve(
   {
