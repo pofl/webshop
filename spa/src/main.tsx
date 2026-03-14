@@ -8,28 +8,21 @@ import ProductPage from "./pages/ProductPage";
 
 const router = createBrowserRouter([
   {
-    path: "/",
-    element: (
-      <Layout>
-        <HomePage />
-      </Layout>
-    ),
-  },
-  {
-    path: "/products/:id",
-    element: (
-      <Layout>
-        <ProductPage />
-      </Layout>
-    ),
-  },
-  {
-    path: "/cart",
-    element: (
-      <Layout>
-        <CartPage />
-      </Layout>
-    ),
+    Component: Layout,
+    children: [
+      {
+        path: "/",
+        element: <HomePage />,
+      },
+      {
+        path: "/products/:id",
+        element: <ProductPage />,
+      },
+      {
+        path: "/cart",
+        element: <CartPage />,
+      },
+    ],
   },
 ]);
 
