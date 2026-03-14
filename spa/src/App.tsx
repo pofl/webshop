@@ -1,23 +1,13 @@
-import { Link, Route, Routes } from "react-router-dom";
-import { useCartStore } from "./store";
+import { Route, Routes } from "react-router-dom";
+import { Header } from "./components/Header";
 import CartPage from "./pages/CartPage";
 import HomePage from "./pages/HomePage";
 import ProductPage from "./pages/ProductPage";
 
 export default function App() {
-  const count = useCartStore((s) => s.count);
-
   return (
     <>
-      <header className="site-header">
-        <Link to="/" className="site-title">
-          Web Shop
-        </Link>
-        <Link to="/cart" className="cart-button">
-          🛒 Cart
-          {count > 0 && <span className="cart-badge">{count}</span>}
-        </Link>
-      </header>
+      <Header />
       <main className="container">
         <Routes>
           <Route path="/" element={<HomePage />} />
