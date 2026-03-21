@@ -13,8 +13,8 @@ dev-react-router:
 dev-astro:
 	pnpm dev:astro
 
-dev-tanstack:
-	pnpm dev:tanstack
+dev-react-router-dom:
+	pnpm dev:react-router-dom
 
 build:
 	pnpm build
@@ -28,8 +28,8 @@ build-react-router:
 build-astro:
 	pnpm build:astro
 
-build-tanstack:
-	pnpm build:tanstack
+build-react-router-dom:
+	pnpm build:react-router-dom
 
 start:
 	node apps/server/dist/index.js
