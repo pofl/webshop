@@ -4,8 +4,8 @@ dev:
 dev-server:
 	pnpm dev:server
 
-dev-spa:
-	pnpm dev:spa
+dev-react-router:
+	pnpm dev:react-router
 
 dev-astro:
 	pnpm dev:astro
@@ -16,8 +16,8 @@ build:
 build-server:
 	pnpm build:server
 
-build-spa:
-	pnpm build:spa
+build-react-router:
+	pnpm build:react-router
 
 build-astro:
 	pnpm build:astro
