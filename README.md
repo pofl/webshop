@@ -1,7 +1,5 @@
 # Hono + SQLite Web App Template
 
-Starter repository for small internal web apps using the architecture described in [ARCHITECTURE.md](./ARCHITECTURE.md).
-
 ## Quick start
 
 ```sh
