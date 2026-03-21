@@ -1,0 +1,25 @@
+{
+  "name": "@webshop/tanstack-router",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@tanstack/react-router": "latest",
+    "@webshop/shared": "workspace:*",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "zustand": "^5.0.11"
+  },
+  "devDependencies": {
+    "@tanstack/router-plugin": "latest",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "@vitejs/plugin-react": "^5.1.4",
+    "typescript": "^5.8.3",
+    "vite": "^7.3.1"
+  }
+}

@@ -7,11 +7,13 @@
     "dev:react-router": "pnpm --filter @webshop/react-router run dev",
     "dev:astro": "pnpm --filter @webshop/astro run dev",
     "dev:react-router-dom": "pnpm --filter @webshop/react-router-dom run dev",
+    "dev:tanstack-router": "pnpm --filter @webshop/tanstack-router run dev",
     "build": "pnpm -r run build",
     "build:server": "pnpm --filter @webshop/server run build",
     "build:react-router": "pnpm --filter @webshop/react-router run build",
     "build:astro": "pnpm --filter @webshop/astro run build",
     "build:react-router-dom": "pnpm --filter @webshop/react-router-dom run build",
+    "build:tanstack-router": "pnpm --filter @webshop/tanstack-router run build",
     "migrate": "pnpm --filter @webshop/database run migrate",
     "format": "prettier --write ."
   },
@@ -22,7 +24,8 @@
   "pnpm": {
     "onlyBuiltDependencies": [
       "better-sqlite3",
-      "esbuild"
+      "esbuild",
+      "lightningcss"
     ]
   }
 }

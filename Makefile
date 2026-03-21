@@ -16,6 +16,9 @@ dev-astro:
 dev-react-router-dom:
 	pnpm dev:react-router-dom
 
+dev-tanstack-router:
+	pnpm dev:tanstack-router
+
 build:
 	pnpm build
 
@@ -30,6 +33,9 @@ build-astro:
 
 build-react-router-dom:
 	pnpm build:react-router-dom
+
+build-tanstack-router:
+	pnpm build:tanstack-router
 
 start:
 	node apps/server/dist/index.js
