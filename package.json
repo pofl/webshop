@@ -5,9 +5,11 @@
     "dev": "pnpm --parallel -r run dev",
     "dev:server": "pnpm --filter @webshop/server run dev",
     "dev:spa": "pnpm --filter @webshop/spa run dev",
+    "dev:astro": "pnpm --filter @webshop/astro run dev",
     "build": "pnpm -r run build",
     "build:server": "pnpm --filter @webshop/server run build",
     "build:spa": "pnpm --filter @webshop/spa run build",
+    "build:astro": "pnpm --filter @webshop/astro run build",
     "migrate": "pnpm --filter @webshop/database run migrate",
     "format": "prettier --write ."
   },

@@ -1,0 +1,41 @@
+---
+import { formatPrice } from "@webshop/shared";
+import Layout from "../layouts/Layout.astro";
+import { countCartItems, searchProducts } from "@webshop/database";
+import { db } from "../lib/db.js";
+
+const products = searchProducts(db, "");
+const cartCount = countCartItems(db);
+---
+
+<Layout title="Web Shop" cartCount={cartCount}>
+  <h1>Web Shop</h1>
+  <section class="card">
+    <input
+      type="text"
+      name="q"
+      placeholder="Search products..."
+      class="search-input"
+      hx-get="/products/search"
+      hx-trigger="input changed delay:200ms"
+      hx-target="#product-list"
+      hx-swap="outerHTML"
+      autofocus
+    />
+  </section>
+
+  <section id="product-list" class="product-grid">
+    {
+      products.length === 0 ? (
+        <p class="muted">No products found.</p>
+      ) : (
+        products.map((product) => (
+          <a href={`/products/${product.id}`} class="product-card">
+            <div class="product-name">{product.name}</div>
+            <div class="product-price">{formatPrice(product.price_cents)}</div>
+          </a>
+        ))
+      )
+    }
+  </section>
+</Layout>

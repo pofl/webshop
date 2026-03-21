@@ -1,0 +1,26 @@
+{
+  "name": "@webshop/astro",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check"
+  },
+  "dependencies": {
+    "@astrojs/node": "^10.0.1",
+    "@webshop/database": "workspace:*",
+    "@webshop/shared": "workspace:*",
+    "astro": "^6.0.4",
+    "better-sqlite3": "^12.2.0",
+    "dotenv": "^17.2.3"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.7",
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/node": "^24.5.0",
+    "typescript": "^5.9.3"
+  }
+}

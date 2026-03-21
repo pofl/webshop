@@ -1,0 +1,37 @@
+---
+import { formatPrice } from "@webshop/shared";
+import Layout from "../../layouts/Layout.astro";
+import { countCartItems, listCartItems } from "@webshop/database";
+import { db } from "../../lib/db.js";
+
+const items = listCartItems(db);
+const cartCount = countCartItems(db);
+---
+
+<Layout title="Your Cart" cartCount={cartCount}>
+  <h1>Your Cart</h1>
+  {
+    items.length === 0 ? (
+      <section class="card">
+        <p class="muted">Your cart is empty.</p>
+        <a href="/">Continue shopping</a>
+      </section>
+    ) : (
+      <section class="card">
+        <ul class="cart-list">
+          {items.map((item) => (
+            <li class="cart-item">
+              <a href={`/products/${item.product_id}`} class="cart-item-name">
+                {item.product_name}
+              </a>
+              <span class="cart-item-price">{formatPrice(item.price_cents)}</span>
+              <form method="post" action={`/cart/${item.id}/remove`}>
+                <button type="submit" class="button-danger">Remove</button>
+              </form>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+</Layout>
