@@ -1,6 +1,6 @@
 import { config } from "dotenv";
-import { openDatabase } from "./db.js";
-import { MigrationRunner } from "./migrate.js";
+import { openDatabase } from "./db/db.js";
+import { MigrationRunner } from "./db/migrate.js";
 import { migrations } from "./migrations.js";
 
 config();
