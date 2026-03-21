@@ -1,39 +1,24 @@
 {
-  "name": "hono-sqlite-template",
-  "type": "module",
+  "name": "webshop",
+  "private": true,
   "scripts": {
-    "dev": "tsx watch src/index.tsx",
-    "dev:server": "tsx watch src/index.tsx",
-    "dev:spa": "vite",
-    "build": "tsc",
-    "start": "node dist/index.js",
-    "migrate": "tsx src/run-migrate.ts",
-    "format": "prettier --write .",
-    "husky:install": "husky install"
-  },
-  "dependencies": {
-    "@hono/node-server": "^1.19.8",
-    "@hono/zod-validator": "^0.4.3",
-    "better-sqlite3": "^12.6.2",
-    "dotenv": "^17.2.0",
-    "hono": "^4.11.3",
-    "react": "^19.2.4",
-    "react-dom": "^19.2.4",
-    "react-router": "^7.13.1",
-    "zod": "^3.24.2",
-    "zustand": "^5.0.11"
+    "dev": "pnpm --parallel -r run dev",
+    "dev:server": "pnpm --filter @webshop/server run dev",
+    "dev:spa": "pnpm --filter @webshop/spa run dev",
+    "build": "pnpm -r run build",
+    "build:server": "pnpm --filter @webshop/server run build",
+    "build:spa": "pnpm --filter @webshop/spa run build",
+    "migrate": "pnpm --filter @webshop/database run migrate",
+    "format": "prettier --write ."
   },
   "devDependencies": {
-    "@types/better-sqlite3": "^7.6.13",
-    "@types/node": "^20.11.17",
-    "@types/react": "^19.2.14",
-    "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react": "^5.1.4",
     "husky": "^9.0.11",
-    "prettier": "^3.8.1",
-    "tsx": "^4.7.1",
-    "typed-htmx": "^0.3.1",
-    "typescript": "^5.8.3",
-    "vite": "^7.3.1"
+    "prettier": "^3.8.1"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "better-sqlite3",
+      "esbuild"
+    ]
   }
 }

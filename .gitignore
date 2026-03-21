@@ -1,5 +1,7 @@
-dist
-dist-spa
+# Build outputs
+**/dist/
+
+# Database
 data/
 
 # dev

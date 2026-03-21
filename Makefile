@@ -1,11 +1,23 @@
 dev:
-	npm run dev
+	pnpm dev
+
+dev-server:
+	pnpm dev:server
+
+dev-spa:
+	pnpm dev:spa
 
 build:
-	npm run build
+	pnpm build
+
+build-server:
+	pnpm build:server
+
+build-spa:
+	pnpm build:spa
 
 start:
-	npm start
+	node apps/server/dist/index.js
 
 migrate:
-	npm run migrate
+	pnpm migrate

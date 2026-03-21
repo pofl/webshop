@@ -1,29 +1,46 @@
-# Use official Node.js image
+# Build stage
 FROM node:25-alpine AS builder
 
-# Create app directory
+# Install pnpm
+RUN corepack enable && corepack prepare pnpm@latest --activate
+
 WORKDIR /app
 
-# Install all dependencies for build
-COPY package.json package-lock.json ./
-RUN npm ci
+# Copy workspace manifests first for layer caching
+COPY package.json pnpm-workspace.yaml pnpm-lock.yaml ./
+COPY apps/server/package.json ./apps/server/
+COPY packages/shared/package.json ./packages/shared/
+COPY packages/database/package.json ./packages/database/
 
-# Copy application source and build
+RUN pnpm install --frozen-lockfile
+
+# Copy all source and build
 COPY . .
-RUN npm run build
+RUN pnpm --filter @webshop/shared run build
+RUN pnpm --filter @webshop/database run build
+RUN pnpm --filter @webshop/server run build
 
-# Runtime image with production deps only
+# Runtime image
 FROM node:25-alpine AS runtime
 
+RUN corepack enable && corepack prepare pnpm@latest --activate
+
 WORKDIR /app
 
-COPY package.json package-lock.json ./
-RUN npm ci --omit=dev
+# Copy workspace manifests
+COPY package.json pnpm-workspace.yaml pnpm-lock.yaml ./
+COPY apps/server/package.json ./apps/server/
+COPY packages/shared/package.json ./packages/shared/
+COPY packages/database/package.json ./packages/database/
+
+RUN pnpm install --frozen-lockfile --prod
 
 # Copy built artifacts
-COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/apps/server/dist ./apps/server/dist
+COPY --from=builder /app/packages/shared/dist ./packages/shared/dist
+COPY --from=builder /app/packages/database/dist ./packages/database/dist
 COPY --from=builder /app/public ./public
 
 EXPOSE 3000
 
-CMD ["npm", "start"]
+CMD ["node", "apps/server/dist/index.js"]
