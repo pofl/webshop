@@ -17,20 +17,12 @@ export const Layout: FC<LayoutProps> = ({ title, children, cartCount = 0 }) => {
         <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
         <link rel="stylesheet" href="/static/styles.css"></link>
       </head>
-      <body>
+      <body hx-boost="true">
         <header class="site-header">
-          <a href="/" class="site-title" hx-get="/" hx-target="#main-content" hx-swap="innerHTML" hx-push-url="true">
+          <a href="/" class="site-title">
             Web Shop
           </a>
-          <a
-            href="/cart"
-            class="cart-button"
-            id="cart-badge-container"
-            hx-get="/cart"
-            hx-target="#main-content"
-            hx-swap="innerHTML"
-            hx-push-url="true"
-          >
+          <a href="/cart" class="cart-button" id="cart-badge-container">
             🛒 Cart
             {cartCount > 0 && <span class="cart-badge">{cartCount}</span>}
           </a>

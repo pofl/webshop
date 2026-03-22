@@ -1,7 +1,6 @@
 import { Hono } from "hono";
 import type { FC } from "hono/jsx";
 import { Layout } from "../components/Layout.js";
-import { respond } from "../respond.js";
 import type { Repository } from "@webshop/database";
 import type { ProductRecord } from "@webshop/shared";
 import { formatPrice } from "@webshop/shared";
@@ -17,10 +16,10 @@ export const ProductList: FC<{ products: ProductRecord[] }> = ({ products }) => 
         <a
           href={`/products/${product.id}`}
           class="product-card"
-          hx-get={`/products/${product.id}`}
+          hx-get={`/partials/products/${product.id}`}
           hx-target="#main-content"
           hx-swap="innerHTML"
-          hx-push-url="true"
+          hx-push-url={`/products/${product.id}`}
         >
           <div class="product-name">{product.name}</div>
           <div class="product-price">{formatPrice(product.price_cents)}</div>
@@ -30,9 +29,9 @@ export const ProductList: FC<{ products: ProductRecord[] }> = ({ products }) => 
   </section>
 );
 
-const ProductDetailContent: FC<{ product: ProductRecord }> = ({ product }) => (
+export const ProductDetailContent: FC<{ product: ProductRecord }> = ({ product }) => (
   <div>
-    <a href="/" class="back-link" hx-get="/" hx-target="#main-content" hx-swap="innerHTML" hx-push-url="true">
+    <a href="/" class="back-link" hx-get="/partials/" hx-target="#main-content" hx-swap="innerHTML" hx-push-url="/">
       ← Back to search
     </a>
     <section class="card" x-data="{ adding: false, added: false }">
@@ -70,6 +69,20 @@ const ProductDetailPage: FC<{ product: ProductRecord; cartCount: number }> = ({ 
 export const createProductRoutes = (repo: Repository) => {
   const app = new Hono();
 
+  app.get("/:id", zValidator("param", idParamSchema), (c) => {
+    const { id } = c.req.valid("param");
+    const product = repo.getProductById(id);
+    if (!product) return c.notFound();
+    const cartCount = repo.countCartItems();
+    return c.html(<ProductDetailPage product={product} cartCount={cartCount} />);
+  });
+
+  return app;
+};
+
+export const createProductPartialRoutes = (repo: Repository) => {
+  const app = new Hono();
+
   app.get("/search", zValidator("query", searchQuerySchema), (c) => {
     const { q } = c.req.valid("query");
     const products = repo.searchProducts(q);
@@ -80,12 +93,7 @@ export const createProductRoutes = (repo: Repository) => {
     const { id } = c.req.valid("param");
     const product = repo.getProductById(id);
     if (!product) return c.notFound();
-    const cartCount = repo.countCartItems();
-    return respond(
-      c,
-      <ProductDetailContent product={product} />,
-      <ProductDetailPage product={product} cartCount={cartCount} />
-    );
+    return c.html(<ProductDetailContent product={product} />);
   });
 
   return app;

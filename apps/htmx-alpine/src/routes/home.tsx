@@ -1,12 +1,11 @@
 import { Hono } from "hono";
 import type { FC } from "hono/jsx";
 import { Layout } from "../components/Layout.js";
-import { respond } from "../respond.js";
 import type { Repository } from "@webshop/database";
 import type { ProductRecord } from "@webshop/shared";
 import { ProductList } from "./products.js";
 
-const HomeContent: FC<{ products: ProductRecord[] }> = ({ products }) => (
+export const HomeContent: FC<{ products: ProductRecord[] }> = ({ products }) => (
   <div>
     <h1>Web Shop</h1>
     <section class="card" x-data="{ query: '' }">
@@ -16,7 +15,7 @@ const HomeContent: FC<{ products: ProductRecord[] }> = ({ products }) => (
         placeholder="Search products…"
         class="search-input"
         x-model="query"
-        hx-get="/products/search"
+        hx-get="/partials/products/search"
         hx-trigger="input changed delay:200ms"
         hx-target="#product-list"
         hx-swap="outerHTML"
@@ -39,7 +38,18 @@ export const createHomeRoutes = (repo: Repository) => {
   app.get("/", (c) => {
     const products = repo.searchProducts("");
     const cartCount = repo.countCartItems();
-    return respond(c, <HomeContent products={products} />, <HomePage products={products} cartCount={cartCount} />);
+    return c.html(<HomePage products={products} cartCount={cartCount} />);
+  });
+
+  return app;
+};
+
+export const createHomePartialRoutes = (repo: Repository) => {
+  const app = new Hono();
+
+  app.get("/", (c) => {
+    const products = repo.searchProducts("");
+    return c.html(<HomeContent products={products} />);
   });
 
   return app;

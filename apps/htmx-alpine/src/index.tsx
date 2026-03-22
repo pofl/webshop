@@ -5,9 +5,9 @@ import { Hono } from "hono";
 import { fileURLToPath } from "node:url";
 import { resolve, dirname } from "node:path";
 import { MigrationRunner, migrations, openDatabase, Repository } from "@webshop/database";
-import { createCartRoutes } from "./routes/cart.js";
-import { createHomeRoutes } from "./routes/home.js";
-import { createProductRoutes } from "./routes/products.js";
+import { createCartRoutes, createCartPartialRoutes } from "./routes/cart.js";
+import { createHomeRoutes, createHomePartialRoutes } from "./routes/home.js";
+import { createProductRoutes, createProductPartialRoutes } from "./routes/products.js";
 
 config();
 const db = openDatabase();
@@ -25,25 +25,15 @@ const publicDir = process.env.PUBLIC_DIR ?? resolve(__dirname, "../../../public"
 
 app.use("/static/*", serveStatic({ root: publicDir, rewriteRequestPath: (path) => path.replace(/^\/static/, "") }));
 
-// HTMX redirect middleware: convert 3xx redirects to HX-Redirect for HTMX requests
-app.use("*", async (c, next) => {
-  await next();
-  const response = c.res;
-  const isHtmx = Boolean(c.req.header("HX-Request"));
-  const location = response.headers.get("Location");
-
-  if (isHtmx && location && response.status >= 300 && response.status < 400) {
-    c.header("HX-Redirect", location);
-    return c.body(null, 204);
-  }
-
-  return response;
-});
-
-// Mount route modules
+// Full-page routes
 app.route("/", createHomeRoutes(repo));
 app.route("/products", createProductRoutes(repo));
 app.route("/cart", createCartRoutes(repo));
+
+// Partial routes for HTMX swaps
+app.route("/partials", createHomePartialRoutes(repo));
+app.route("/partials/products", createProductPartialRoutes(repo));
+app.route("/partials/cart", createCartPartialRoutes(repo));
 
 serve(
   {
