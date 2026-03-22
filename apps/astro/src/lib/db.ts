@@ -1,9 +1,11 @@
 import { config } from "dotenv";
-import { openDatabase, MigrationRunner, migrations } from "@webshop/database";
+import { openDatabase, MigrationRunner, migrations, Repository } from "@webshop/database";
 
 config();
 
-export const db = openDatabase();
+const db = openDatabase();
 
 const runner = new MigrationRunner(db);
 runner.runMigrations(migrations);
+
+export const repo = new Repository(db);

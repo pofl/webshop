@@ -1,8 +1,7 @@
-import type { Database } from "better-sqlite3";
 import { Hono } from "hono";
 import type { FC } from "hono/jsx";
 import { Layout } from "../components/Layout.js";
-import { countCartItems, searchProducts } from "@webshop/database";
+import type { Repository } from "@webshop/database";
 import type { ProductRecord } from "@webshop/shared";
 import { ProductList } from "./products.js";
 
@@ -28,12 +27,12 @@ const HomePage: FC<{ products: ProductRecord[]; cartCount: number }> = ({ produc
   );
 };
 
-export const createHomeRoutes = (db: Database) => {
+export const createHomeRoutes = (repo: Repository) => {
   const app = new Hono();
 
   app.get("/", (c) => {
-    const products = searchProducts(db, "");
-    const cartCount = countCartItems(db);
+    const products = repo.searchProducts("");
+    const cartCount = repo.countCartItems();
     return c.html(<HomePage products={products} cartCount={cartCount} />);
   });
 

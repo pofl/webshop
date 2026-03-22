@@ -1,15 +1,7 @@
-import type { Database } from "better-sqlite3";
 import { Hono } from "hono";
 import type { Context } from "hono";
 import { getCookie, setCookie } from "hono/cookie";
-import {
-  addToCartSession,
-  countCartItemsSession,
-  getProductById,
-  listCartItemsSession,
-  removeCartItemSession,
-  searchProducts,
-} from "@webshop/database";
+import type { Repository } from "@webshop/database";
 import { addToCartFormSchema, idParamSchema, searchQuerySchema } from "@webshop/shared";
 import { zValidator } from "../validator-wrapper.js";
 
@@ -27,19 +19,19 @@ function getOrCreateSession(c: Context): string {
   return sessionId;
 }
 
-export const createApiRoutes = (db: Database) => {
+export const createApiRoutes = (repo: Repository) => {
   const app = new Hono();
 
   // Products
   app.get("/products/search", zValidator("query", searchQuerySchema), (c) => {
     const { q } = c.req.valid("query");
-    const products = searchProducts(db, q);
+    const products = repo.searchProducts(q);
     return c.json({ products });
   });
 
   app.get("/products/:id", zValidator("param", idParamSchema), (c) => {
     const { id } = c.req.valid("param");
-    const product = getProductById(db, id);
+    const product = repo.getProductById(id);
     if (!product) return c.json({ error: "Product not found" }, 404);
     return c.json(product);
   });
@@ -47,24 +39,24 @@ export const createApiRoutes = (db: Database) => {
   // Cart
   app.get("/cart", (c) => {
     const sessionId = getOrCreateSession(c);
-    const items = listCartItemsSession(db, sessionId);
-    const count = countCartItemsSession(db, sessionId);
+    const items = repo.listCartItemsSession(sessionId);
+    const count = repo.countCartItemsSession(sessionId);
     return c.json({ items, count });
   });
 
   app.post("/cart/items", zValidator("json", addToCartFormSchema), (c) => {
     const { product_id } = c.req.valid("json");
-    const product = getProductById(db, product_id);
+    const product = repo.getProductById(product_id);
     if (!product) return c.json({ error: "Product not found" }, 404);
     const sessionId = getOrCreateSession(c);
-    const item = addToCartSession(db, product_id, sessionId);
+    const item = repo.addToCartSession(product_id, sessionId);
     return c.json(item, 201);
   });
 
   app.delete("/cart/items/:id", zValidator("param", idParamSchema), (c) => {
     const { id } = c.req.valid("param");
     const sessionId = getOrCreateSession(c);
-    const removed = removeCartItemSession(db, id, sessionId);
+    const removed = repo.removeCartItemSession(id, sessionId);
     if (!removed) return c.json({ error: "Cart item not found" }, 404);
     return c.body(null, 204);
   });

@@ -1,8 +1,7 @@
-import type { Database } from "better-sqlite3";
 import { Hono } from "hono";
 import type { FC } from "hono/jsx";
 import { Layout } from "../components/Layout.js";
-import { addToCart, countCartItems, listCartItems, removeCartItem } from "@webshop/database";
+import type { Repository } from "@webshop/database";
 import type { CartItemRecord } from "@webshop/shared";
 import { addToCartFormSchema, formatPrice, idParamSchema } from "@webshop/shared";
 import { zValidator } from "../validator-wrapper.js";
@@ -37,24 +36,24 @@ const CartPage: FC<{ items: CartItemRecord[]; cartCount: number }> = ({ items, c
   </Layout>
 );
 
-export const createCartRoutes = (db: Database) => {
+export const createCartRoutes = (repo: Repository) => {
   const app = new Hono();
 
   app.get("/", (c) => {
-    const items = listCartItems(db);
-    const cartCount = countCartItems(db);
+    const items = repo.listCartItems();
+    const cartCount = repo.countCartItems();
     return c.html(<CartPage items={items} cartCount={cartCount} />);
   });
 
   app.post("/add", zValidator("form", addToCartFormSchema), (c) => {
     const { product_id } = c.req.valid("form");
-    addToCart(db, product_id);
+    repo.addToCart(product_id);
     return c.redirect("/cart");
   });
 
   app.post("/:id/remove", zValidator("param", idParamSchema), (c) => {
     const { id } = c.req.valid("param");
-    removeCartItem(db, id);
+    repo.removeCartItem(id);
     return c.redirect("/cart");
   });
 

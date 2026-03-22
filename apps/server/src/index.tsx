@@ -4,7 +4,7 @@ import { config } from "dotenv";
 import { Hono } from "hono";
 import { fileURLToPath } from "node:url";
 import { resolve, dirname } from "node:path";
-import { MigrationRunner, migrations, openDatabase } from "@webshop/database";
+import { MigrationRunner, migrations, openDatabase, Repository } from "@webshop/database";
 import { createApiRoutes } from "./routes/api.js";
 import { createCartRoutes } from "./routes/cart.js";
 import { createHomeRoutes } from "./routes/home.js";
@@ -15,6 +15,8 @@ const db = openDatabase();
 
 const runner = new MigrationRunner(db);
 runner.runMigrations(migrations);
+
+const repo = new Repository(db);
 
 const app = new Hono();
 
@@ -40,10 +42,10 @@ app.use("*", async (c, next) => {
 });
 
 // Mount route modules
-app.route("/", createHomeRoutes(db));
-app.route("/products", createProductRoutes(db));
-app.route("/cart", createCartRoutes(db));
-app.route("/api", createApiRoutes(db));
+app.route("/", createHomeRoutes(repo));
+app.route("/products", createProductRoutes(repo));
+app.route("/cart", createCartRoutes(repo));
+app.route("/api", createApiRoutes(repo));
 
 serve(
   {

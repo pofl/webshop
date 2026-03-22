@@ -1,11 +1,10 @@
 ---
 import { formatPrice } from "@webshop/shared";
 import Layout from "../layouts/Layout.astro";
-import { countCartItems, searchProducts } from "@webshop/database";
-import { db } from "../lib/db.js";
+import { repo } from "../lib/db.js";
 
-const products = searchProducts(db, "");
-const cartCount = countCartItems(db);
+const products = repo.searchProducts("");
+const cartCount = repo.countCartItems();
 ---
 
 <Layout title="Web Shop" cartCount={cartCount}>

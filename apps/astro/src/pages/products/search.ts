@@ -1,7 +1,6 @@
 import type { APIRoute } from "astro";
-import { searchProducts } from "@webshop/database";
 import { formatPrice } from "@webshop/shared";
-import { db } from "../../lib/db.js";
+import { repo } from "../../lib/db.js";
 
 function escapeHtml(input: string): string {
   return input
@@ -14,7 +13,7 @@ function escapeHtml(input: string): string {
 
 export const GET: APIRoute = ({ url }) => {
   const query = url.searchParams.get("q") ?? "";
-  const products = searchProducts(db, query);
+  const products = repo.searchProducts(query);
 
   const body =
     products.length === 0

@@ -1,8 +1,7 @@
-import type { Database } from "better-sqlite3";
 import { Hono } from "hono";
 import type { FC } from "hono/jsx";
 import { Layout } from "../components/Layout.js";
-import { countCartItems, getProductById, searchProducts } from "@webshop/database";
+import type { Repository } from "@webshop/database";
 import type { ProductRecord } from "@webshop/shared";
 import { formatPrice } from "@webshop/shared";
 import { idParamSchema, searchQuerySchema } from "@webshop/shared";
@@ -40,20 +39,20 @@ const ProductDetailPage: FC<{ product: ProductRecord; cartCount: number }> = ({ 
   </Layout>
 );
 
-export const createProductRoutes = (db: Database) => {
+export const createProductRoutes = (repo: Repository) => {
   const app = new Hono();
 
   app.get("/search", zValidator("query", searchQuerySchema), (c) => {
     const { q } = c.req.valid("query");
-    const products = searchProducts(db, q);
+    const products = repo.searchProducts(q);
     return c.html(<ProductList products={products} />);
   });
 
   app.get("/:id", zValidator("param", idParamSchema), (c) => {
     const { id } = c.req.valid("param");
-    const product = getProductById(db, id);
+    const product = repo.getProductById(id);
     if (!product) return c.notFound();
-    const cartCount = countCartItems(db);
+    const cartCount = repo.countCartItems();
     return c.html(<ProductDetailPage product={product} cartCount={cartCount} />);
   });
 

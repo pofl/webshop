@@ -1,12 +1,11 @@
 ---
 import { formatPrice } from "@webshop/shared";
 import Layout from "../../layouts/Layout.astro";
-import { countCartItems, getProductById } from "@webshop/database";
-import { db } from "../../lib/db.js";
+import { repo } from "../../lib/db.js";
 
 const id = Number(Astro.params.id);
-const product = Number.isInteger(id) ? getProductById(db, id) : null;
-const cartCount = countCartItems(db);
+const product = Number.isInteger(id) ? repo.getProductById(id) : null;
+const cartCount = repo.countCartItems();
 ---
 
 <Layout title={product?.name ?? "Product not found"} cartCount={cartCount}>
