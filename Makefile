@@ -10,6 +10,9 @@ dev-api:
 dev-honojsx:
 	pnpm dev:honojsx
 
+dev-htmx-alpine:
+	pnpm dev:htmx-alpine
+
 dev-react-router:
 	pnpm dev:react-router
 
@@ -31,6 +34,9 @@ build-api:
 build-honojsx:
 	pnpm build:honojsx
 
+build-htmx-alpine:
+	pnpm build:htmx-alpine
+
 build-react-router:
 	pnpm build:react-router
 
@@ -48,6 +54,9 @@ start-api:
 
 start-honojsx:
 	node apps/honojsx/dist/index.js
+
+start-htmx-alpine:
+	node apps/htmx-alpine/dist/index.js
 
 migrate:
 	pnpm migrate

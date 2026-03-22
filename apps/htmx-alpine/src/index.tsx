@@ -25,6 +25,21 @@ const publicDir = process.env.PUBLIC_DIR ?? resolve(__dirname, "../../../public"
 
 app.use("/static/*", serveStatic({ root: publicDir, rewriteRequestPath: (path) => path.replace(/^\/static/, "") }));
 
+// HTMX redirect middleware: convert 3xx redirects to HX-Redirect for HTMX requests
+app.use("*", async (c, next) => {
+  await next();
+  const response = c.res;
+  const isHtmx = Boolean(c.req.header("HX-Request"));
+  const location = response.headers.get("Location");
+
+  if (isHtmx && location && response.status >= 300 && response.status < 400) {
+    c.header("HX-Redirect", location);
+    return c.body(null, 204);
+  }
+
+  return response;
+});
+
 // Mount route modules
 app.route("/", createHomeRoutes(repo));
 app.route("/products", createProductRoutes(repo));
@@ -33,9 +48,9 @@ app.route("/cart", createCartRoutes(repo));
 serve(
   {
     fetch: app.fetch,
-    port: 3001,
+    port: 3002,
   },
   (info) => {
-    console.log(`Hono JSX server is running on http://localhost:${info.port}`);
+    console.log(`HTMX + Alpine server is running on http://localhost:${info.port}`);
   }
 );
