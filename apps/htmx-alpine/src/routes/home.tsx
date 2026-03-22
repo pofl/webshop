@@ -1,6 +1,7 @@
 import { Hono } from "hono";
 import type { FC } from "hono/jsx";
 import { Layout } from "../components/Layout.js";
+import { respond } from "../respond.js";
 import type { Repository } from "@webshop/database";
 import type { ProductRecord } from "@webshop/shared";
 import { ProductList } from "./products.js";
@@ -38,11 +39,7 @@ export const createHomeRoutes = (repo: Repository) => {
   app.get("/", (c) => {
     const products = repo.searchProducts("");
     const cartCount = repo.countCartItems();
-    const isHtmx = Boolean(c.req.header("HX-Request"));
-    if (isHtmx) {
-      return c.html(<HomeContent products={products} />);
-    }
-    return c.html(<HomePage products={products} cartCount={cartCount} />);
+    return respond(c, <HomeContent products={products} />, <HomePage products={products} cartCount={cartCount} />);
   });
 
   return app;

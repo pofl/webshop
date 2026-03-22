@@ -1,6 +1,7 @@
 import { Hono } from "hono";
 import type { FC } from "hono/jsx";
 import { Layout } from "../components/Layout.js";
+import { respond } from "../respond.js";
 import type { Repository } from "@webshop/database";
 import type { CartItemRecord } from "@webshop/shared";
 import { addToCartFormSchema, formatPrice, idParamSchema } from "@webshop/shared";
@@ -68,11 +69,7 @@ export const createCartRoutes = (repo: Repository) => {
   app.get("/", (c) => {
     const items = repo.listCartItems();
     const cartCount = repo.countCartItems();
-    const isHtmx = Boolean(c.req.header("HX-Request"));
-    if (isHtmx) {
-      return c.html(<CartContent items={items} />);
-    }
-    return c.html(<CartPage items={items} cartCount={cartCount} />);
+    return respond(c, <CartContent items={items} />, <CartPage items={items} cartCount={cartCount} />);
   });
 
   app.post("/add", zValidator("form", addToCartFormSchema), (c) => {
