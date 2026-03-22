@@ -4,8 +4,11 @@ install:
 dev:
 	pnpm dev
 
-dev-server:
-	pnpm dev:server
+dev-api:
+	pnpm dev:api
+
+dev-honojsx:
+	pnpm dev:honojsx
 
 dev-react-router:
 	pnpm dev:react-router
@@ -22,8 +25,11 @@ dev-tanstack-router:
 build:
 	pnpm build
 
-build-server:
-	pnpm build:server
+build-api:
+	pnpm build:api
+
+build-honojsx:
+	pnpm build:honojsx
 
 build-react-router:
 	pnpm build:react-router
@@ -37,8 +43,11 @@ build-react-router-dom:
 build-tanstack-router:
 	pnpm build:tanstack-router
 
-start:
-	node apps/server/dist/index.js
+start-api:
+	node apps/api/dist/index.js
+
+start-honojsx:
+	node apps/honojsx/dist/index.js
 
 migrate:
 	pnpm migrate

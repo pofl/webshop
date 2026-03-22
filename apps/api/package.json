@@ -1,10 +1,10 @@
 {
-  "name": "@webshop/server",
+  "name": "@webshop/api",
   "version": "0.0.0",
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "tsx watch src/index.tsx",
+    "dev": "tsx watch src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js"
   },
@@ -20,7 +20,6 @@
   "devDependencies": {
     "@types/node": "^20.11.17",
     "tsx": "^4.7.1",
-    "typed-htmx": "^0.3.1",
     "typescript": "^5.8.3"
   }
 }

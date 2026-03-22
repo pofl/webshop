@@ -15,6 +15,40 @@ importers:
         specifier: ^3.8.1
         version: 3.8.1
 
+  apps/api:
+    dependencies:
+      '@hono/node-server':
+        specifier: ^1.19.8
+        version: 1.19.11(hono@4.12.8)
+      '@hono/zod-validator':
+        specifier: ^0.4.3
+        version: 0.4.3(hono@4.12.8)(zod@3.25.76)
+      '@webshop/database':
+        specifier: workspace:*
+        version: link:../../packages/database
+      '@webshop/shared':
+        specifier: workspace:*
+        version: link:../../packages/shared
+      dotenv:
+        specifier: ^17.2.0
+        version: 17.3.1
+      hono:
+        specifier: ^4.11.3
+        version: 4.12.8
+      zod:
+        specifier: ^3.24.2
+        version: 3.25.76
+    devDependencies:
+      '@types/node':
+        specifier: ^20.11.17
+        version: 20.19.37
+      tsx:
+        specifier: ^4.7.1
+        version: 4.21.0
+      typescript:
+        specifier: ^5.8.3
+        version: 5.9.3
+
   apps/astro:
     dependencies:
       '@astrojs/node':
@@ -47,6 +81,43 @@ importers:
         version: 24.12.0
       typescript:
         specifier: ^5.9.3
+        version: 5.9.3
+
+  apps/honojsx:
+    dependencies:
+      '@hono/node-server':
+        specifier: ^1.19.8
+        version: 1.19.11(hono@4.12.8)
+      '@hono/zod-validator':
+        specifier: ^0.4.3
+        version: 0.4.3(hono@4.12.8)(zod@3.25.76)
+      '@webshop/database':
+        specifier: workspace:*
+        version: link:../../packages/database
+      '@webshop/shared':
+        specifier: workspace:*
+        version: link:../../packages/shared
+      dotenv:
+        specifier: ^17.2.0
+        version: 17.3.1
+      hono:
+        specifier: ^4.11.3
+        version: 4.12.8
+      zod:
+        specifier: ^3.24.2
+        version: 3.25.76
+    devDependencies:
+      '@types/node':
+        specifier: ^20.11.17
+        version: 20.19.37
+      tsx:
+        specifier: ^4.7.1
+        version: 4.21.0
+      typed-htmx:
+        specifier: ^0.3.1
+        version: 0.3.1
+      typescript:
+        specifier: ^5.8.3
         version: 5.9.3
 
   apps/react-router:
@@ -116,43 +187,6 @@ importers:
       vite:
         specifier: ^7.3.1
         version: 7.3.1(@types/node@24.12.0)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.8.3)
-
-  apps/server:
-    dependencies:
-      '@hono/node-server':
-        specifier: ^1.19.8
-        version: 1.19.11(hono@4.12.8)
-      '@hono/zod-validator':
-        specifier: ^0.4.3
-        version: 0.4.3(hono@4.12.8)(zod@3.25.76)
-      '@webshop/database':
-        specifier: workspace:*
-        version: link:../../packages/database
-      '@webshop/shared':
-        specifier: workspace:*
-        version: link:../../packages/shared
-      dotenv:
-        specifier: ^17.2.0
-        version: 17.3.1
-      hono:
-        specifier: ^4.11.3
-        version: 4.12.8
-      zod:
-        specifier: ^3.24.2
-        version: 3.25.76
-    devDependencies:
-      '@types/node':
-        specifier: ^20.11.17
-        version: 20.19.37
-      tsx:
-        specifier: ^4.7.1
-        version: 4.21.0
-      typed-htmx:
-        specifier: ^0.3.1
-        version: 0.3.1
-      typescript:
-        specifier: ^5.8.3
-        version: 5.9.3
 
   apps/tanstack-router:
     dependencies:

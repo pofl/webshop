@@ -5,7 +5,6 @@ import { Hono } from "hono";
 import { fileURLToPath } from "node:url";
 import { resolve, dirname } from "node:path";
 import { MigrationRunner, migrations, openDatabase, Repository } from "@webshop/database";
-import { createApiRoutes } from "./routes/api.js";
 import { createCartRoutes } from "./routes/cart.js";
 import { createHomeRoutes } from "./routes/home.js";
 import { createProductRoutes } from "./routes/products.js";
@@ -20,7 +19,7 @@ const repo = new Repository(db);
 
 const app = new Hono();
 
-// Resolve the public directory relative to this file's location (../../public from apps/server/src/)
+// Resolve the public directory relative to this file's location (../../public from apps/honojsx/src/)
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const publicDir = process.env.PUBLIC_DIR ?? resolve(__dirname, "../../../public");
 
@@ -45,14 +44,13 @@ app.use("*", async (c, next) => {
 app.route("/", createHomeRoutes(repo));
 app.route("/products", createProductRoutes(repo));
 app.route("/cart", createCartRoutes(repo));
-app.route("/api", createApiRoutes(repo));
 
 serve(
   {
     fetch: app.fetch,
-    port: 3000,
+    port: 3001,
   },
   (info) => {
-    console.log(`Server is running on http://localhost:${info.port}`);
+    console.log(`Hono JSX server is running on http://localhost:${info.port}`);
   }
 );
