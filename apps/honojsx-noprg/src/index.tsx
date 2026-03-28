@@ -1,0 +1,41 @@
+import { serve } from "@hono/node-server";
+import { serveStatic } from "@hono/node-server/serve-static";
+import { config } from "dotenv";
+import { Hono } from "hono";
+import { fileURLToPath } from "node:url";
+import { resolve, dirname } from "node:path";
+import { MigrationRunner, migrations, openDatabase, Repository } from "@webshop/database";
+import { createCartRoutes } from "./routes/cart.js";
+import { createHomeRoutes } from "./routes/home.js";
+import { createProductRoutes } from "./routes/products.js";
+
+config();
+const db = openDatabase();
+
+const runner = new MigrationRunner(db);
+runner.runMigrations(migrations);
+
+const repo = new Repository(db);
+
+const app = new Hono();
+
+// Resolve the public directory relative to this file's location
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const publicDir = process.env.PUBLIC_DIR ?? resolve(__dirname, "../../../public");
+
+app.use("/static/*", serveStatic({ root: publicDir, rewriteRequestPath: (path) => path.replace(/^\/static/, "") }));
+
+// Mount route modules
+app.route("/", createHomeRoutes(repo));
+app.route("/products", createProductRoutes(repo));
+app.route("/cart", createCartRoutes(repo));
+
+serve(
+  {
+    fetch: app.fetch,
+    port: 3001,
+  },
+  (info) => {
+    console.log(`Hono JSX server is running on http://localhost:${info.port}`);
+  }
+);

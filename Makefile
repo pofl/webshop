@@ -10,6 +10,9 @@ dev-api:
 dev-honojsx:
 	pnpm dev:honojsx
 
+dev-honojsx-noprg:
+	pnpm dev:honojsx-noprg
+
 dev-htmx-alpine:
 	pnpm dev:htmx-alpine
 
@@ -34,6 +37,9 @@ build-api:
 build-honojsx:
 	pnpm build:honojsx
 
+build-honojsx-noprg:
+	pnpm build:honojsx-noprg
+
 build-htmx-alpine:
 	pnpm build:htmx-alpine
 
@@ -54,6 +60,9 @@ start-api:
 
 start-honojsx:
 	node apps/honojsx/dist/index.js
+
+start-honojsx-noprg:
+	node apps/honojsx-noprg/dist/index.js
 
 start-htmx-alpine:
 	node apps/htmx-alpine/dist/index.js
