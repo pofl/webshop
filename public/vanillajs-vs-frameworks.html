@@ -237,7 +237,33 @@
 
         if (sourceBoxCode) {
           const wrapper = section.querySelector("[data-example-wrapper]");
-          sourceBoxCode.textContent = wrapper ? wrapper.innerHTML : "";
+          const content = wrapper ? wrapper.innerHTML : "";
+
+          // Dedent logic
+          const lines = content.split("\n");
+          let result = content;
+          if (lines.length > 1) {
+            // Find the minimum indentation of non-empty lines
+            const minIndent = lines.reduce((min, line) => {
+              if (line.trim().length === 0) return min;
+              const match = line.match(/^(\s*)\S/);
+              if (match) {
+                return Math.min(min, match[1].length);
+              }
+              return min;
+            }, Infinity);
+
+            if (minIndent !== Infinity && minIndent > 0) {
+              result = lines
+                .map((line) => {
+                  if (line.trim().length === 0) return "";
+                  return line.startsWith(" ".repeat(minIndent)) ? line.substring(minIndent) : line.trimStart();
+                })
+                .join("\n");
+            }
+          }
+
+          sourceBoxCode.textContent = result.trim();
           hljs.highlightElement(sourceBoxCode);
         }
       });
