@@ -6,13 +6,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Stateful UI: Frameworks vs Vanilla Patterns</title>
 
-    <!-- Alpine.js CDN -->
-    <script src="https://unpkg.com/alpinejs" defer></script>
+    <!-- Alpine.js CDN with fallback -->
+    <script
+      src="https://unpkg.com/alpinejs"
+      defer
+      onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/alpinejs'"
+    ></script>
 
-    <!-- React & Babel CDNs -->
-    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- React CDNs with fallback -->
+    <script
+      src="https://unpkg.com/react@18/umd/react.development.js"
+      onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/react@18/umd/react.development.js'"
+    ></script>
+    <script
+      src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"
+      onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.development.js'"
+    ></script>
 
     <!-- Syntax Highlighting -->
     <link
@@ -188,7 +197,7 @@
       <div class="example-card" data-example-wrapper>
         <div id="react-root" class="example-root"></div>
 
-        <script type="text/babel">
+        <script>
           const { useState } = React;
 
           function CounterApp() {
@@ -196,18 +205,25 @@
             const max = 100;
             const remaining = max - text.length;
 
-            return (
-              <div>
-                <textarea value={text} onChange={(e) => setText(e.target.value)} placeholder="Type here..." />
-                <div className="counter" style={{ color: remaining < 0 ? "red" : "black" }}>
-                  Characters left: {remaining}
-                </div>
-              </div>
+            return React.createElement(
+              "div",
+              null,
+              React.createElement("textarea", {
+                value: text,
+                onChange: (e) => setText(e.target.value),
+                placeholder: "Type here...",
+              }),
+              React.createElement(
+                "div",
+                { className: "counter", style: { color: remaining < 0 ? "red" : "black" } },
+                "Characters left: ",
+                remaining
+              )
             );
           }
 
           const root = ReactDOM.createRoot(document.getElementById("react-root"));
-          root.render(<CounterApp />);
+          root.render(React.createElement(CounterApp));
         </script>
       </div>
     </section>
