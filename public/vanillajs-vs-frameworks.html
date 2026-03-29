@@ -14,6 +14,13 @@
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
+    <!-- Syntax Highlighting -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github-dark.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+
     <style>
       body {
         font-family:
@@ -49,18 +56,23 @@
         box-sizing: border-box;
         font-family: inherit;
       }
-      .source-box {
-        width: 100%;
-        height: 120px;
+      .source-details {
         margin-bottom: 1rem;
-        background: #272822;
-        color: #f8f8f2;
-        font-family: "Courier New", Courier, monospace;
+      }
+      .source-details > summary {
+        cursor: pointer;
+        color: #1f2937;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+      }
+      .source-box {
+        margin: 0.5rem 0 0;
+        border-radius: 6px;
+        overflow-x: auto;
+      }
+      .source-box code {
         font-size: 0.85rem;
-        padding: 10px;
-        border-radius: 4px;
-        border: none;
-        resize: vertical;
+        line-height: 1.45;
       }
       .example-card {
         background: #fbfbfd;
@@ -104,7 +116,10 @@
     <section class="vanilla" id="section-1">
       <h2>1. Basic Vanilla (Imperative)</h2>
       <p>Logic is scattered inside the event listener. Harder to maintain as UI grows.</p>
-      <textarea class="source-box" readonly></textarea>
+      <details class="source-details">
+        <summary>Show source</summary>
+        <pre class="source-box"><code class="language-html"></code></pre>
+      </details>
       <div class="example-card" data-example-wrapper>
         <div class="example-root">
           <textarea id="v1-input" placeholder="Type here..."></textarea>
@@ -131,7 +146,10 @@
     <section class="vanilla" id="section-2">
       <h2>2. Vanilla + Render Function</h2>
       <p>Separates <strong>State</strong> from <strong>View</strong>. The UI is a pure reflection of the data.</p>
-      <textarea class="source-box" readonly></textarea>
+      <details class="source-details">
+        <summary>Show source</summary>
+        <pre class="source-box"><code class="language-html"></code></pre>
+      </details>
       <div class="example-card" data-example-wrapper>
         <div class="example-root">
           <textarea id="v2-input" placeholder="Type here..."></textarea>
@@ -163,7 +181,10 @@
     <section class="react" id="section-3">
       <h2>3. React (Component-based)</h2>
       <p>Uses <code>useState</code>. You only update data; React handles the DOM sync automatically.</p>
-      <textarea class="source-box" readonly></textarea>
+      <details class="source-details">
+        <summary>Show source</summary>
+        <pre class="source-box"><code class="language-html"></code></pre>
+      </details>
       <div class="example-card" data-example-wrapper>
         <div id="react-root" class="example-root"></div>
 
@@ -195,7 +216,10 @@
     <section class="alpine" id="section-4">
       <h2>4. Alpine.js (Reactive Markup)</h2>
       <p>Framework power directly in HTML. Most concise for simple stateful widgets.</p>
-      <textarea class="source-box" readonly></textarea>
+      <details class="source-details">
+        <summary>Show source</summary>
+        <pre class="source-box"><code class="language-html"></code></pre>
+      </details>
       <div class="example-card" data-example-wrapper>
         <div class="example-root" x-data="{ text: '', max: 100 }">
           <textarea x-model="text" placeholder="Type here..."></textarea>
@@ -209,9 +233,9 @@
     <script>
       // Logic to populate source textboxes
       document.querySelectorAll("section").forEach((section) => {
-        const sourceBox = section.querySelector(".source-box");
+        const sourceBoxCode = section.querySelector(".source-box code");
 
-        if (sourceBox) {
+        if (sourceBoxCode) {
           const wrapper = section.querySelector("[data-example-wrapper]");
           const content = wrapper ? wrapper.innerHTML.trim() : "";
 
@@ -239,7 +263,8 @@
             }
           }
 
-          sourceBox.value = result.trim();
+          sourceBoxCode.textContent = result.trim();
+          hljs.highlightElement(sourceBoxCode);
         }
       });
     </script>
