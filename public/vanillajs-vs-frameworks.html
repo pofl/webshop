@@ -237,7 +237,7 @@
 
         if (sourceBoxCode) {
           const wrapper = section.querySelector("[data-example-wrapper]");
-          const content = wrapper ? wrapper.innerHTML.trim() : "";
+          const content = wrapper ? wrapper.innerHTML : "";
 
           // Dedent logic
           const lines = content.split("\n");
