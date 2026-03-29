@@ -62,6 +62,12 @@
         border: none;
         resize: vertical;
       }
+      .example-card {
+        background: #fbfbfd;
+        border: 1px solid #e2e6ef;
+        border-radius: 8px;
+        padding: 0.9rem;
+      }
       .counter {
         margin-top: 8px;
         font-weight: bold;
@@ -99,24 +105,26 @@
       <h2>1. Basic Vanilla (Imperative)</h2>
       <p>Logic is scattered inside the event listener. Harder to maintain as UI grows.</p>
       <textarea class="source-box" readonly></textarea>
-      <div class="example-root">
-        <textarea id="v1-input" placeholder="Type here..."></textarea>
-        <div class="counter">Characters left: <span id="v1-count">100</span></div>
+      <div class="example-card" data-example-wrapper>
+        <div class="example-root">
+          <textarea id="v1-input" placeholder="Type here..."></textarea>
+          <div class="counter">Characters left: <span id="v1-count">100</span></div>
+        </div>
+
+        <script>
+          (function () {
+            const MAX = 100;
+            const input = document.getElementById("v1-input");
+            const display = document.getElementById("v1-count");
+
+            input.addEventListener("input", (e) => {
+              const remaining = MAX - e.target.value.length;
+              display.textContent = remaining;
+              display.style.color = remaining < 0 ? "red" : "black";
+            });
+          })();
+        </script>
       </div>
-
-      <script>
-        (function () {
-          const MAX = 100;
-          const input = document.getElementById("v1-input");
-          const display = document.getElementById("v1-count");
-
-          input.addEventListener("input", (e) => {
-            const remaining = MAX - e.target.value.length;
-            display.textContent = remaining;
-            display.style.color = remaining < 0 ? "red" : "black";
-          });
-        })();
-      </script>
     </section>
 
     <!-- 2. VANILLA WITH RENDER FUNCTION -->
@@ -124,29 +132,31 @@
       <h2>2. Vanilla + Render Function</h2>
       <p>Separates <strong>State</strong> from <strong>View</strong>. The UI is a pure reflection of the data.</p>
       <textarea class="source-box" readonly></textarea>
-      <div class="example-root">
-        <textarea id="v2-input" placeholder="Type here..."></textarea>
-        <div class="counter">Characters left: <span id="v2-count">100</span></div>
+      <div class="example-card" data-example-wrapper>
+        <div class="example-root">
+          <textarea id="v2-input" placeholder="Type here..."></textarea>
+          <div class="counter">Characters left: <span id="v2-count">100</span></div>
+        </div>
+
+        <script>
+          (function () {
+            const state = { text: "", max: 100 };
+            const input = document.getElementById("v2-input");
+            const display = document.getElementById("v2-count");
+
+            const render = () => {
+              const remaining = state.max - state.text.length;
+              display.textContent = remaining;
+              display.style.color = remaining < 0 ? "red" : "black";
+            };
+
+            input.addEventListener("input", (e) => {
+              state.text = e.target.value;
+              render();
+            });
+          })();
+        </script>
       </div>
-
-      <script>
-        (function () {
-          const state = { text: "", max: 100 };
-          const input = document.getElementById("v2-input");
-          const display = document.getElementById("v2-count");
-
-          const render = () => {
-            const remaining = state.max - state.text.length;
-            display.textContent = remaining;
-            display.style.color = remaining < 0 ? "red" : "black";
-          };
-
-          input.addEventListener("input", (e) => {
-            state.text = e.target.value;
-            render();
-          });
-        })();
-      </script>
     </section>
 
     <!-- 3. REACT (DECLARATIVE COMPONENT) -->
@@ -154,29 +164,31 @@
       <h2>3. React (Component-based)</h2>
       <p>Uses <code>useState</code>. You only update data; React handles the DOM sync automatically.</p>
       <textarea class="source-box" readonly></textarea>
-      <div id="react-root" class="example-root"></div>
+      <div class="example-card" data-example-wrapper>
+        <div id="react-root" class="example-root"></div>
 
-      <script type="text/babel">
-        const { useState } = React;
+        <script type="text/babel">
+          const { useState } = React;
 
-        function CounterApp() {
-          const [text, setText] = useState("");
-          const max = 100;
-          const remaining = max - text.length;
+          function CounterApp() {
+            const [text, setText] = useState("");
+            const max = 100;
+            const remaining = max - text.length;
 
-          return (
-            <div>
-              <textarea value={text} onChange={(e) => setText(e.target.value)} placeholder="Type here..." />
-              <div className="counter" style={{ color: remaining < 0 ? "red" : "black" }}>
-                Characters left: {remaining}
+            return (
+              <div>
+                <textarea value={text} onChange={(e) => setText(e.target.value)} placeholder="Type here..." />
+                <div className="counter" style={{ color: remaining < 0 ? "red" : "black" }}>
+                  Characters left: {remaining}
+                </div>
               </div>
-            </div>
-          );
-        }
+            );
+          }
 
-        const root = ReactDOM.createRoot(document.getElementById("react-root"));
-        root.render(<CounterApp />);
-      </script>
+          const root = ReactDOM.createRoot(document.getElementById("react-root"));
+          root.render(<CounterApp />);
+        </script>
+      </div>
     </section>
 
     <!-- 4. ALPINE.JS (DECLARATIVE INLINE) -->
@@ -184,10 +196,12 @@
       <h2>4. Alpine.js (Reactive Markup)</h2>
       <p>Framework power directly in HTML. Most concise for simple stateful widgets.</p>
       <textarea class="source-box" readonly></textarea>
-      <div class="example-root" x-data="{ text: '', max: 100 }">
-        <textarea x-model="text" placeholder="Type here..."></textarea>
-        <div class="counter" :style="(max - text.length) < 0 ? 'color: red' : 'color: black'">
-          Characters left: <span x-text="max - text.length"></span>
+      <div class="example-card" data-example-wrapper>
+        <div class="example-root" x-data="{ text: '', max: 100 }">
+          <textarea x-model="text" placeholder="Type here..."></textarea>
+          <div class="counter" :style="(max - text.length) < 0 ? 'color: red' : 'color: black'">
+            Characters left: <span x-text="max - text.length"></span>
+          </div>
         </div>
       </div>
     </section>
@@ -196,26 +210,10 @@
       // Logic to populate source textboxes
       document.querySelectorAll("section").forEach((section) => {
         const sourceBox = section.querySelector(".source-box");
-        const exampleRoot = section.querySelector(".example-root");
-        const script = section.querySelector("script");
 
         if (sourceBox) {
-          let content = "";
-
-          if (section.classList.contains("alpine")) {
-            // For Alpine, we want the outerHTML of the example-root because it contains x-data
-            content = exampleRoot ? exampleRoot.outerHTML : "";
-          } else if (section.id === "section-3") {
-            // React
-            let htmlContent = exampleRoot ? exampleRoot.innerHTML : "";
-            let scriptContent = script ? script.outerHTML : "";
-            content = (htmlContent.trim() + "\n\n" + scriptContent.trim()).trim();
-          } else {
-            // Vanilla 1 & 2
-            let htmlContent = exampleRoot ? exampleRoot.innerHTML.trim() : "";
-            let scriptContent = script ? script.innerHTML.trim() : "";
-            content = (htmlContent + "\n\n<script>\n" + scriptContent + "\n<\/script>").trim();
-          }
+          const wrapper = section.querySelector("[data-example-wrapper]");
+          const content = wrapper ? wrapper.innerHTML.trim() : "";
 
           // Dedent logic
           const lines = content.split("\n");
